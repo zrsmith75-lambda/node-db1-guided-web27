@@ -46,7 +46,21 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  
+  const changes = req.body
+
+  db('posts')
+  .where({ id: req.params.id})
+  .update(changes)
+  .then(count => {
+    if (count > 0) {
+      res.status(200).json({ message: 'Record updated'})
+    } else {
+      res.status(404).json({ message: 'Can not update record'})
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: `${err}`})
+  })
 
 });
 
